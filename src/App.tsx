@@ -1,26 +1,13 @@
-import { ThemeProvider } from '@mui/system';
+import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
+import { ThemeProvider } from '@mui/system';
 import { Header } from './components/Header';
 import { Layout } from './components/Layout';
 import { appTheme } from './config/theme';
-import Typography from '@mui/material/Typography'
 import { Route, Routes } from 'react-router-dom';
-
-const Home = () => (
-  <Box>
-    <Typography variant="h3" component="h1">
-      Home
-    </Typography>
-  </Box>
-);
-
-const About = () => (
-  <Box>
-    <Typography variant="h3" component="h1">
-      About
-    </Typography>
-  </Box>
-);
+import { CategoryEdit } from './features/categories/CategoryEdit';
+import { CategoryList } from './features/categories/CategoryList';
+import { CategoryCreate } from './features/categories/CategoryCreate';
 
 function App() {
   return <ThemeProvider theme={appTheme}>
@@ -33,10 +20,19 @@ function App() {
     >
       <Header />
       <Layout>
-        <h1>Welcome to React Router!</h1>
         <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="about" element={<About/>} />
+          <Route path="/" element={<CategoryList />} />
+          <Route path="/categories" element={<CategoryList/>} />
+          <Route path="/categories/create" element={<CategoryCreate/>} />
+          <Route path="/categories/edit/:id" element={<CategoryEdit/>} />
+          <Route path="*" element={
+            <Box>
+              <Typography variant="h1">404</Typography>
+              <Typography variant="h2">Page not found</Typography>
+            </Box>
+            }
+          />
+
         </Routes>
       </Layout>
     </Box>
