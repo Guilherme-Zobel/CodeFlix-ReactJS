@@ -40,6 +40,18 @@ const categoriesSlice = createSlice({
 });
 
 export const selectCategories = (state: RootState) => state.categories;
+export const selectCategoryById = (state: RootState, id: String) => {
+  state.categories.find((category) => category.id === id)
 
+  return category || {
+    id: "",
+    name: "",
+    description: "",
+    is_active: false,
+    deleted_at: null,
+    created_at: "",
+    updated_at: "",
+  };
+};
 
 export default categoriesSlice.reducer;
