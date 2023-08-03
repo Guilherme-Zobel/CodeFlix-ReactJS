@@ -8,9 +8,18 @@ import { Route, Routes } from 'react-router-dom';
 import { CategoryEdit } from './features/categories/CategoryEdit';
 import { CategoryList } from './features/categories/CategoryList';
 import { CategoryCreate } from './features/categories/CategoryCreate';
+import { SnackbarProvider } from 'notistack';
 
 function App() {
-  return <ThemeProvider theme={appTheme}>
+  return (
+  <ThemeProvider theme={appTheme}>
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right"
+      }}
+      >
     <Box
       component="main"
         sx={{
@@ -36,7 +45,9 @@ function App() {
         </Routes>
       </Layout>
     </Box>
-  </ThemeProvider>;
+    </SnackbarProvider>
+  </ThemeProvider>
+  );
 }
 
 export default App;

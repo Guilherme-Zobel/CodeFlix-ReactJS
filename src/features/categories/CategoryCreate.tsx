@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { Category, createCategory } from "./categorySlice";
 import { CategoryForm } from "./components/CategoryForm";
+import { useSnackbar } from "notistack";
 
 export const CategoryCreate = () => {
   const [isdisabled, setIsdisabled] = useState(false);
@@ -17,11 +18,13 @@ export const CategoryCreate = () => {
     }
   );
   const dispatch = useAppDispatch()
+  const { enqueueSnackbar } = useSnackbar()
 
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(createCategory(categoryState))
+    enqueueSnackbar("Category create successfully", { variant: "success" })
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
