@@ -1,13 +1,19 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { deleteCategory, selectCategories } from "./categorySlice";
+import { deleteCategory, selectCategories, useDeleteCategoryMutation, useGetCategoriesQuery } from "./categorySlice";
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp, GridToolbar } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useSnackbar } from "notistack";
+import { useEffect } from "react";
 
 export const CategoryList = () => {
-  const categories = useAppSelector(selectCategories)
+  const {data, isFetching, isError} = useGetCategoriesQuery();
+  const [deleteCategory, deleteCategoryStatus] = useDeleteCategoryMutation();
+  
+console.log(data?.data);
+
+
   const dispatch = useAppDispatch()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -18,13 +24,13 @@ export const CategoryList = () => {
     },
   }
 
-  const rows: GridRowsProp = categories.map((category) => ({
+  const rows: GridRowsProp = data ? data.data.map((category) => ({
     id: category.id,
     name: category.name, 
     isActive: category.is_active,
     description: category.description,
     createdAt: new Date(category.created_at).toLocaleDateString('pt-BR')
-  }))
+  })) : [];
   
   const columns: GridColDef[] = [
     {
@@ -59,10 +65,18 @@ export const CategoryList = () => {
     }
   ];
 
-  function handleDeleteCategory(id: string) {
-    dispatch(deleteCategory(id))
-    enqueueSnackbar("Category deleted successfully", { variant: "success" });
+  async function handleDeleteCategory(id: string) {
+    await deleteCategory({ id })
   }
+
+  useEffect(() => {
+    if (deleteCategoryStatus.isSuccess) {
+      enqueueSnackbar(`Category deleted`, { variant: "success"})
+    }
+    if (deleteCategoryStatus.error) {
+      enqueueSnackbar(`Category deleted`, { variant: "error"})
+    }
+  }, [deleteCategoryStatus, enqueueSnackbar])
 
   function renderActionsCell(params: GridRenderCellParams) {
     
